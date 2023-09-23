@@ -9,11 +9,12 @@
 
 <div>Student List</div>
 
+<a class="btn btn-primary" asp-action="AddStudent">Add Student</a>
 
 <table class="table table-dark">
 
     <tr>
-        <th colspan="6">Student</th>
+        <th colspan="8">Student</th>
     </tr>
 
     <tr>
@@ -22,19 +23,19 @@
         <td>Admission Date</td>
         <td>Email</td>
         <td>GPA</td>
-        <td>Details</td>
-
-
+        <td colspan="3">Actions</td>
     </tr>
     @foreach (var student in Model)
     {
         <tr>
             <td>@student.FirstName @student.LastName</td>
             <td>@student.Course</td>
-            <td>@student.AdmissionDate</td>
+            <td>@DateOnly.FromDateTime(student.AdmissionDate)</td>
             <td>@student.Email</td>
             <td>@student.GPA</td>
+            <td><a asp-action="EditStudent" asp-route-id="@student.Id">Edit</a></td>
             <td><a asp-action="ShowDetail" asp-route-id="@student.Id">Show Details</a></td>
+            <td><a asp-action="DeleteStudent" asp-route-id="@student.Id">Delete</a></td>
 
         </tr>
     }

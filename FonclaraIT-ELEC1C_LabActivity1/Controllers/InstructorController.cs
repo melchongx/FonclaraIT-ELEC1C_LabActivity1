@@ -1,5 +1,6 @@
 ﻿using FonclaraIT_ELEC1C_LabActivity1.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata;
 
 namespace FonclaraIT_ELEC1C_LabActivity1.Controllers
 {
@@ -39,6 +40,19 @@ namespace FonclaraIT_ELEC1C_LabActivity1.Controllers
                 return View(instructor);
 
             return NotFound();
+        }
+
+        [HttpGet]
+        public IActionResult AddInstructor()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddInstructor(Instructor newInstructor)
+        {
+            InstructorList.Add(newInstructor);
+            return View("Index", InstructorList);
         }
     }
 }

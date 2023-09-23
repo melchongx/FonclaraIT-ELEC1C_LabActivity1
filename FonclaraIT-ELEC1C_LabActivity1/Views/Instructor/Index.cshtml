@@ -4,9 +4,11 @@
 @{
 }
 @model IEnumerable<Instructor>
+<div>Instructor List</div>
+<a class="btn btn-primary" asp-action="AddInstructor">Add Instructor</a>
 <table class="table">
     <tr>
-        <th colspan="5">Instructor</th>
+        <th colspan="8">Instructor</th>
     </tr>
     <tr>
         <th>First Name</th>
@@ -14,7 +16,7 @@
         <th>Status</th>
         <th>Rank</th>
         <th>Hiring Date</th>
-        <th>Details</th>
+        <th colspan="3">Actions</th>
     </tr>
 
     @foreach (var instructor in Model)
@@ -31,7 +33,9 @@
             }
             <td>@instructor.Rank</td>
             <td>@instructor.HiringDate</td>
+            <td><a asp-action="EditInstructor" asp-route-id="@instructor.Id">Edit</a></td>
             <td><a asp-action="ShowDetail" asp-route-id="@instructor.Id">Show Details</a></td>
+            <td><a asp-action="DeleteInstructor" asp-route-id="@instructor.Id">Delete</a></td>
         </tr>
     }
 </table>
