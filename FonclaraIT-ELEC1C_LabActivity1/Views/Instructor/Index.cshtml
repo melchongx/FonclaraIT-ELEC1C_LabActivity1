@@ -32,7 +32,7 @@
                 <td>Probationary</td>
             }
             <td>@instructor.Rank</td>
-            <td>@instructor.HiringDate</td>
+            <td>@DateOnly.FromDateTime(instructor.HiringDate)</td>
             <td><a asp-action="EditInstructor" asp-route-id="@instructor.Id">Edit</a></td>
             <td><a asp-action="ShowDetail" asp-route-id="@instructor.Id">Show Details</a></td>
             <td><a asp-action="DeleteInstructor" asp-route-id="@instructor.Id">Delete</a></td>
