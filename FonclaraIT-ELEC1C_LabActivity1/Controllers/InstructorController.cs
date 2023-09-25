@@ -1,4 +1,5 @@
 ﻿using FonclaraIT_ELEC1C_LabActivity1.Models;
+using FonclaraIT_ELEC1C_LabActivity1.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata;
 
@@ -6,35 +7,21 @@ namespace FonclaraIT_ELEC1C_LabActivity1.Controllers
 {
     public class InstructorController : Controller
     {
-        List<Instructor> InstructorList = new List<Instructor>
+        private readonly IMyFakeDataService _fakeData;
+
+        public InstructorController(IMyFakeDataService fakeData)
         {
-            new Instructor()
-            {
-                Id = 1,
-                FirstName = "Melfred",
-                LastName = "Fonclara",
-                isTenured = false,
-                Rank = Rank.AssistantProfessor,
-                HiringDate = DateTime.Parse("2023-08-08")
-            },
-            new Instructor()
-            {
-                Id = 1,
-                FirstName = "Melfred",
-                LastName = "Fonclara",
-                isTenured = false,
-                Rank = Rank.AssistantProfessor,
-                HiringDate = DateTime.Parse("2023-08-08")
-            }
-        };
+            _fakeData = fakeData;
+        }
+
         public IActionResult Index()
         {
-            return View(InstructorList);
+            return View(_fakeData.InstructorList);
         }
 
         public IActionResult ShowDetail(int id)
         {
-            Instructor? instructor = InstructorList.FirstOrDefault(ins => ins.Id == id);
+            Instructor? instructor = _fakeData.InstructorList.FirstOrDefault(ins => ins.Id == id);
             
             if (instructor != null)
                 return View(instructor);
@@ -51,14 +38,14 @@ namespace FonclaraIT_ELEC1C_LabActivity1.Controllers
         [HttpPost]
         public IActionResult AddInstructor(Instructor newInstructor)
         {
-            InstructorList.Add(newInstructor);
-            return View("Index", InstructorList);
+            _fakeData.InstructorList.Add(newInstructor);
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
         public IActionResult EditInstructor(int id)
         {
-            Instructor? instructor = InstructorList.FirstOrDefault(ins => ins.Id == id);
+            Instructor? instructor = _fakeData.InstructorList.FirstOrDefault(ins => ins.Id == id);
 
             if (instructor != null)
                 return View(instructor);
@@ -69,7 +56,7 @@ namespace FonclaraIT_ELEC1C_LabActivity1.Controllers
         [HttpPost]
         public IActionResult EditInstructor(Instructor editInstructor)
         {
-            Instructor? instructor = InstructorList.FirstOrDefault(ins => ins.Id == editInstructor.Id);
+            Instructor? instructor = _fakeData.InstructorList.FirstOrDefault(ins => ins.Id == editInstructor.Id);
 
             if (instructor != null)
             {
@@ -78,16 +65,34 @@ namespace FonclaraIT_ELEC1C_LabActivity1.Controllers
                 instructor.isTenured = editInstructor.isTenured;
                 instructor.Rank = editInstructor.Rank;
                 instructor.HiringDate = editInstructor.HiringDate;
-                return View("Index", InstructorList);
+                return RedirectToAction("Index");
             }
 
             return NotFound();
         }
 
-        public IActionResult DeleteStudent(Instructor instructor)
+        [HttpGet]
+        public IActionResult DeleteInstructor(int id)
         {
-            InstructorList.RemoveAt(instructor.Id-1);
-            return View("Index", InstructorList);
+            //Search for the student whose id matches the given id
+            Instructor? instructor = _fakeData.InstructorList.FirstOrDefault(ins => ins.Id == id);
+
+            if (instructor != null)//was an student found?
+                return View(instructor);
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        public IActionResult DeleteInstructor(Instructor deleteInstructor)
+        {
+            Instructor? instructor = _fakeData.InstructorList.FirstOrDefault(ins => ins.Id == deleteInstructor.Id);
+
+            if (instructor != null)
+            {
+                _fakeData.InstructorList.Remove(instructor);
+            }
+            return RedirectToAction("Index");
         }
     }
 }

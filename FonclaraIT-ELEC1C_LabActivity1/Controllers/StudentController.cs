@@ -1,4 +1,5 @@
 ﻿using FonclaraIT_ELEC1C_LabActivity1.Models;
+using FonclaraIT_ELEC1C_LabActivity1.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -6,31 +7,23 @@ namespace FonclaraIT_ELEC1C_LabActivity1.Controllers
 {
     public class StudentController : Controller
     {
-        List<Student> StudentList = new List<Student>
-            {
-                new Student()
-                {
-                    Id= 1,FirstName = "Gabriel",LastName = "Montano", Course = Course.BSIT, AdmissionDate = DateTime.Parse("2022-08-26"), GPA = 1.5, Email = "ghaby021@gmail.com"
-                },
-                new Student()
-                {
-                    Id= 2,FirstName = "Zyx",LastName = "Montano", Course = Course.BSIS, AdmissionDate = DateTime.Parse("2022-08-07"), GPA = 1, Email = "zyx@gmail.com"
-                },
-                new Student()
-                {
-                    Id= 3,FirstName = "Aerdriel",LastName = "Montano", Course = Course.BSCS, AdmissionDate = DateTime.Parse("2020-01-25"), GPA = 1.5, Email = "aerdriel@gmail.com"
-                }
-            };
+        private readonly IMyFakeDataService _fakeData;
+
+        public StudentController(IMyFakeDataService fakeData)
+        {
+            _fakeData = fakeData;
+        }
+
         public IActionResult Index()
         {
 
-            return View(StudentList);
+            return View(_fakeData.StudentList);
         }
 
         public IActionResult ShowDetail(int id)
         {
             //Search for the student whose id matches the given id
-            Student? student = StudentList.FirstOrDefault(st => st.Id == id);
+            Student? student = _fakeData.StudentList.FirstOrDefault(st => st.Id == id);
 
             if (student != null)//was an student found?
                 return View(student);
@@ -47,15 +40,16 @@ namespace FonclaraIT_ELEC1C_LabActivity1.Controllers
         [HttpPost]
         public IActionResult AddStudent(Student newStudent)
         {
-            StudentList.Add(newStudent);
-            return View("Index", StudentList);
+            _fakeData.StudentList.Add(newStudent);
+            return RedirectToAction("Index");
+            
         }
 
         [HttpGet]
         public IActionResult EditStudent(int id)
         {
             //Search for the student whose id matches the given id
-            Student? student = StudentList.FirstOrDefault(st => st.Id == id);
+            Student? student = _fakeData.StudentList.FirstOrDefault(st => st.Id == id);
 
             if (student != null)//was an student found?
                 return View(student);
@@ -66,7 +60,7 @@ namespace FonclaraIT_ELEC1C_LabActivity1.Controllers
         [HttpPost]
         public IActionResult EditStudent(Student editStudent)
         {
-            Student? student = StudentList.FirstOrDefault(st => st.Id == editStudent.Id);
+            Student? student = _fakeData.StudentList.FirstOrDefault(st => st.Id == editStudent.Id);
 
             if (student != null)//was an student found?
             {
@@ -76,17 +70,34 @@ namespace FonclaraIT_ELEC1C_LabActivity1.Controllers
                 student.Course = editStudent.Course;
                 student.AdmissionDate = editStudent.AdmissionDate;
                 student.Email = editStudent.Email;
-                return View("Index", StudentList);
+                return RedirectToAction("Index");
 
             }
 
             return NotFound();
         }
 
-        public IActionResult DeleteStudent(Student student)
+        [HttpGet]
+        public IActionResult DeleteStudent(int id)
         {
-            StudentList.RemoveAt(student.Id-1);
-            return View("Index", StudentList);
+            //Search for the student whose id matches the given id
+            Student? student = _fakeData.StudentList.FirstOrDefault(st => st.Id == id);
+
+            if (student != null)//was an student found?
+                return View(student);
+
+            return NotFound();
+        }
+        [HttpPost]
+        public IActionResult DeleteStudent(Student deleteStudent)
+        { 
+            Student? student = _fakeData.StudentList.FirstOrDefault(st => st.Id == deleteStudent.Id);
+
+            if (student != null)//was an student found?
+            {
+                _fakeData.StudentList.Remove(student);
+            }
+            return RedirectToAction("Index");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

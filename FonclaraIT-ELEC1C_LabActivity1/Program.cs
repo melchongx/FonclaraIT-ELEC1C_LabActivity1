@@ -1,6 +1,9 @@
+using FonclaraIT_ELEC1C_LabActivity1.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSingleton<IMyFakeDataService, MyFakeDataService>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
