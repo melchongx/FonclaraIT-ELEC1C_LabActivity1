@@ -39,6 +39,9 @@ namespace FonclaraIT_ELEC1C_LabActivity1.Controllers
         [HttpPost]
         public IActionResult AddInstructor(Instructor newInstructor)
         {
+            if (!ModelState.IsValid)
+                return View();
+            
             _dbContext.Instructors.Add(newInstructor);
             _dbContext.SaveChanges();
             return RedirectToAction("Index");
@@ -59,6 +62,9 @@ namespace FonclaraIT_ELEC1C_LabActivity1.Controllers
         public IActionResult EditInstructor(Instructor editInstructor)
         {
             Instructor? instructor = _dbContext.Instructors.FirstOrDefault(ins => ins.Id == editInstructor.Id);
+
+            if (!ModelState.IsValid)
+                return View();
 
             if (instructor != null)
             {

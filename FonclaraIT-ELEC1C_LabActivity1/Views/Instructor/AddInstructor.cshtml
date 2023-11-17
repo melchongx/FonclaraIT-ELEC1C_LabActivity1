@@ -6,6 +6,8 @@
 @model Instructor;
 <h1>Add Instructor</h1>
 
+<div asp-validation-summary="All"></div>
+
 <form asp-action="AddInstructor" method="post">
     <input asp-for="FirstName" class="form-control" placeholder="First Name" />
     <input asp-for="LastName" class="form-control" placeholder="Last Name" />

@@ -41,6 +41,9 @@ namespace FonclaraIT_ELEC1C_LabActivity1.Controllers
         [HttpPost]
         public IActionResult AddStudent(Student newStudent)
         {
+            if (!ModelState.IsValid)
+                return View();
+
             _dbContext.Students.Add(newStudent);
             _dbContext.SaveChanges();
             return RedirectToAction("Index");
@@ -63,6 +66,9 @@ namespace FonclaraIT_ELEC1C_LabActivity1.Controllers
         public IActionResult EditStudent(Student editStudent)
         {
             Student? student = _dbContext.Students.FirstOrDefault(st => st.Id == editStudent.Id);
+
+            if (!ModelState.IsValid)
+                return View();
 
             if (student != null)//was an student found?
             {

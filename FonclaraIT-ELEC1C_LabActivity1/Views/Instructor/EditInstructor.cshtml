@@ -5,6 +5,8 @@
 @model Instructor;
 <h1>Edit Instructor</h1>
 
+<div asp-validation-summary="All"></div>
+
 <form asp-action="EditInstructor" method="post">
     <input class="form-control" asp-for="Id" placeholder="@Model.Id">
     <input asp-for="FirstName" class="form-control" placeholder="@Model.FirstName" />

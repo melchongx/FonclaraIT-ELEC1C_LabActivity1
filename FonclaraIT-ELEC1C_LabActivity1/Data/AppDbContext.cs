@@ -1,9 +1,10 @@
 ﻿using FonclaraIT_ELEC1C_LabActivity1.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace FonclaraIT_ELEC1C_LabActivity1.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<User>
     {
         public DbSet<Student> Students { get; set; }    
         public DbSet<Instructor> Instructors { get; set; }
